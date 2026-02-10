@@ -47,14 +47,39 @@
     <!-- Preload hero image (visible on Screen 1) -->
     <link rel="preload" as="image" href="Photos/likes1.webp" type="image/webp">
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <!-- LeadConnector form embed — loaded dynamically when calendar screen is reached -->
 
     <style>
+        /* ===== SELF-HOSTED POPPINS FONTS ===== */
+        @font-face {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url('/fonts/poppins-400.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 500;
+            font-display: swap;
+            src: url('/fonts/poppins-500.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 600;
+            font-display: swap;
+            src: url('/fonts/poppins-600.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 700;
+            font-display: swap;
+            src: url('/fonts/poppins-700.woff2') format('woff2');
+        }
+
         /* ===== RESET & BASE ===== */
         *, *::before, *::after {
             margin: 0;
@@ -953,7 +978,10 @@
         </div>
         <div class="progress-bar-inner">
             <span class="progress-logo">
-                <img src="leadpop-full-logo.png" alt="LeadPop">
+                <picture>
+                    <source srcset="leadpop-full-logo.webp" type="image/webp">
+                    <img src="leadpop-full-logo.png" alt="LeadPop" width="185" height="60">
+                </picture>
             </span>
             <div class="progress-track">
                 <div class="progress-fill" id="progressFill"></div>
@@ -971,7 +999,7 @@
                 <div class="hero-image">
                     <picture>
                         <source srcset="Photos/likes1.webp" type="image/webp">
-                        <img src="Photos/likes1.png" alt="James LaRosa - Founder of LeadPop">
+                        <img src="Photos/likes1.png" alt="James LaRosa - Founder of LeadPop" width="64" height="64">
                     </picture>
                 </div>
 
