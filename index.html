@@ -1366,6 +1366,9 @@
 
     <!-- ==================== JAVASCRIPT ==================== -->
     <script>
+        // ===== CONFIGURATION =====
+        const TRACKING_API = 'https://leadpop-funnel-server-production.up.railway.app/api/track';
+
         // ===== STATE =====
         let currentScreen = 1;
         const totalSteps = 9;
@@ -1374,6 +1377,92 @@
             monthlyVolume: '',
             currentSource: ''
         };
+
+        // ===== SESSION & BROWSER IDS =====
+        const sessionId = crypto.randomUUID();
+
+        function getCookie(name) {
+            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            return match ? decodeURIComponent(match[2]) : null;
+        }
+
+        function getFbp() {
+            return getCookie('_fbp') || null;
+        }
+
+        function getFbc() {
+            const cookie = getCookie('_fbc');
+            if (cookie) return cookie;
+
+            const params = new URLSearchParams(window.location.search);
+            const fbclid = params.get('fbclid');
+            if (fbclid) {
+                return 'fb.1.' + Date.now() + '.' + fbclid;
+            }
+            return null;
+        }
+
+        function getGaClientId() {
+            const ga = getCookie('_ga');
+            if (ga) {
+                const parts = ga.split('.');
+                return parts.length >= 4 ? parts[2] + '.' + parts[3] : ga;
+            }
+            return null;
+        }
+
+        // ===== SERVER-SIDE TRACKING =====
+        function trackEvent(eventName, extra) {
+            const payload = {
+                event_name: eventName,
+                step: currentScreen,
+                event_id: crypto.randomUUID(),
+                session_id: sessionId,
+                source_url: window.location.href,
+                fbp: getFbp(),
+                fbc: getFbc(),
+                ga_client_id: getGaClientId(),
+                answers: { ...answers },
+                ...extra
+            };
+
+            navigator.sendBeacon(TRACKING_API, new Blob(
+                [JSON.stringify(payload)],
+                { type: 'application/json' }
+            ));
+
+            pushGTMEvent(eventName, {
+                ...extra,
+                event_id: payload.event_id
+            });
+
+            saveProgress();
+        }
+
+        // ===== LOCAL STORAGE PERSISTENCE =====
+        function saveProgress() {
+            try {
+                localStorage.setItem('lp_funnel', JSON.stringify({
+                    session_id: sessionId,
+                    step: currentScreen,
+                    answers: answers,
+                    timestamp: Date.now()
+                }));
+            } catch (e) { /* storage full or disabled */ }
+        }
+
+        function loadProgress() {
+            try {
+                const saved = JSON.parse(localStorage.getItem('lp_funnel'));
+                if (!saved) return null;
+                const age = Date.now() - saved.timestamp;
+                if (age > 30 * 60 * 1000) {
+                    localStorage.removeItem('lp_funnel');
+                    return null;
+                }
+                return saved;
+            } catch (e) { return null; }
+        }
 
         // ===== PROGRESS BAR =====
         function updateProgress(step) {
@@ -1399,12 +1488,10 @@
 
             if (!next) return;
 
-            // Hide current
             current.classList.remove('visible');
             setTimeout(() => {
                 current.classList.remove('active');
 
-                // Toggle wide layout and hide proof strip for calendar screen
                 const proofStrip = document.getElementById('stickyProof');
                 if (num === 9) {
                     wrapper.classList.add('wide');
@@ -1414,22 +1501,21 @@
                     proofStrip.classList.remove('hidden');
                 }
 
-                // Show next
                 next.classList.add('active');
-                // Force reflow
                 void next.offsetWidth;
                 next.classList.add('visible');
 
                 currentScreen = num;
                 updateProgress(num);
 
-                // Scroll to top
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
-                // Push GTM event
-                pushGTMEvent('quiz_step_' + num);
+                var eventMap = {
+                    5: 'quiz_started',
+                    9: 'calendar_view'
+                };
+                trackEvent(eventMap[num] || 'quiz_step_' + num);
 
-                // If loading screen, start animation
                 if (num === 8) {
                     startLoadingSequence();
                 }
@@ -1447,7 +1533,7 @@
                 void reject.offsetWidth;
                 reject.classList.add('visible');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                pushGTMEvent('quiz_rejected');
+                trackEvent('quiz_rejected');
             }, 300);
         }
 
@@ -1455,18 +1541,21 @@
         function toggleMultiSelect(el, questionId) {
             el.classList.toggle('selected');
 
-            // Update answers
             const container = document.getElementById(questionId + '-options');
             const selected = container.querySelectorAll('.option-card.selected');
             answers.loanTypes = Array.from(selected).map(card => card.dataset.value);
 
-            // Enable/disable continue button
             const nextBtn = document.getElementById(questionId + '-next');
             if (answers.loanTypes.length > 0) {
                 nextBtn.classList.add('enabled');
             } else {
                 nextBtn.classList.remove('enabled');
             }
+
+            trackEvent('quiz_answer', {
+                question: 'q1',
+                answer_value: answers.loanTypes.join(', ')
+            });
         }
 
         // ===== SINGLE SELECT (Q2, Q3) =====
@@ -1474,23 +1563,20 @@
             const container = document.getElementById(questionId + '-options');
             const allCards = container.querySelectorAll('.option-card');
 
-            // Deselect all
             allCards.forEach(card => card.classList.remove('selected'));
-
-            // Select this one
             el.classList.add('selected');
 
-            // Store answer
             if (questionId === 'q2') {
                 answers.monthlyVolume = el.dataset.value;
             } else if (questionId === 'q3') {
                 answers.currentSource = el.dataset.value;
             }
 
-            // Push answer to GTM
-            pushGTMEvent('quiz_answer_' + questionId, { value: el.dataset.value });
+            trackEvent('quiz_answer', {
+                question: questionId,
+                answer_value: el.dataset.value
+            });
 
-            // Auto-advance after brief delay
             setTimeout(() => {
                 goToScreen(nextScreen);
             }, 400);
@@ -1502,22 +1588,24 @@
             if (calendarLoaded) return;
             calendarLoaded = true;
 
-            // Load LeadConnector form embed script
             const script = document.createElement('script');
             script.src = 'https://link.msgsndr.com/js/form_embed.js';
             script.type = 'text/javascript';
             document.body.appendChild(script);
 
-            // Inject iframe src
             const iframe = document.getElementById('quiz-calendar-embed');
             if (iframe && iframe.dataset.src) {
-                iframe.src = iframe.dataset.src;
+                const params = new URLSearchParams({
+                    loan_types: answers.loanTypes.join(', '),
+                    monthly_volume: answers.monthlyVolume,
+                    current_source: answers.currentSource
+                });
+                iframe.src = iframe.dataset.src + '?' + params.toString();
             }
         }
 
         // ===== LOADING SEQUENCE =====
         function startLoadingSequence() {
-            // Start loading calendar resources while user watches loading animation
             loadCalendar();
             const steps = [
                 { id: 'ls-1', delay: 400 },
@@ -1532,7 +1620,6 @@
                 }, delay);
             });
 
-            // Mark steps as done
             setTimeout(() => {
                 document.getElementById('ls-1').classList.add('done');
                 document.getElementById('ls-1').querySelector('.step-icon').innerHTML = '&#10003;';
@@ -1549,10 +1636,8 @@
                 document.getElementById('loaderRing').style.display = 'none';
             }, 3200);
 
-            // Transition to calendar
             setTimeout(() => {
-                // Push all answers to GTM before showing calendar
-                pushGTMEvent('quiz_completed', {
+                trackEvent('quiz_completed', {
                     loan_types: answers.loanTypes.join(', '),
                     monthly_volume: answers.monthlyVolume,
                     current_source: answers.currentSource
@@ -1567,7 +1652,8 @@
             window.dataLayer = window.dataLayer || [];
             const eventData = {
                 event: eventName,
-                quiz_current_step: currentScreen
+                quiz_current_step: currentScreen,
+                quiz_answers: { ...answers }
             };
             if (data) {
                 Object.assign(eventData, data);
@@ -1577,7 +1663,6 @@
 
         // ===== INIT =====
         document.addEventListener('DOMContentLoaded', function() {
-            // Show first screen
             const first = document.getElementById('screen-1');
             first.classList.add('active');
             void first.offsetWidth;
@@ -1585,8 +1670,7 @@
 
             updateProgress(1);
 
-            // Push page view event
-            pushGTMEvent('quiz_started');
+            trackEvent('page_view');
         });
     </script>
 </body>

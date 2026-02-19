@@ -1,0 +1,19 @@
+{
+  "name": "leadpop-funnel-server",
+  "version": "1.0.0",
+  "description": "LeadPop funnel tracking backend - Meta CAPI, GA4, GHL integrations",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1"
+  }
+}
