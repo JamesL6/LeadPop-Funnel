@@ -36,6 +36,20 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://leadpop.io/quiz-funnel">
 
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2123621785138978');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2123621785138978&ev=PageView&noscript=1"/></noscript>
+    <!-- End Meta Pixel Code -->
+
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -1412,6 +1426,15 @@
         }
 
         // ===== SERVER-SIDE TRACKING =====
+        const FB_EVENT_MAP = {
+            page_view:      { standard: 'ViewContent' },
+            quiz_started:   { standard: 'InitiateCheckout' },
+            quiz_answer:    { custom: 'QuizAnswer' },
+            quiz_completed: { standard: 'Lead' },
+            calendar_view:  { standard: 'Schedule' },
+            quiz_rejected:  { custom: 'QuizRejected' },
+        };
+
         function trackEvent(eventName, extra) {
             const payload = {
                 event_name: eventName,
@@ -1431,12 +1454,37 @@
                 { type: 'application/json' }
             ));
 
+            fireFbPixel(eventName, payload.event_id, extra);
+
             pushGTMEvent(eventName, {
                 ...extra,
                 event_id: payload.event_id
             });
 
             saveProgress();
+        }
+
+        // ===== BROWSER-SIDE META PIXEL (deduplicates with CAPI via event_id) =====
+        function fireFbPixel(eventName, eventId, extra) {
+            if (typeof fbq === 'undefined') return;
+
+            var mapping = FB_EVENT_MAP[eventName];
+            if (!mapping) return;
+
+            var customData = { funnel_step: currentScreen };
+            if (extra && extra.question) customData.question = extra.question;
+            if (extra && extra.answer_value) customData.answer_value = extra.answer_value;
+            if (answers.loanTypes.length) customData.loan_types = answers.loanTypes.join(', ');
+            if (answers.monthlyVolume) customData.monthly_volume = answers.monthlyVolume;
+            if (answers.currentSource) customData.current_source = answers.currentSource;
+
+            var opts = { eventID: eventId };
+
+            if (mapping.standard) {
+                fbq('track', mapping.standard, customData, opts);
+            } else {
+                fbq('trackCustom', mapping.custom, customData, opts);
+            }
         }
 
         // ===== LOCAL STORAGE PERSISTENCE =====
