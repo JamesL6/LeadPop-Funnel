@@ -429,32 +429,8 @@
         /* ===== RESPONSIVE ===== */
         @media (min-width: 768px) {
             .hero { padding: 64px 40px 72px; }
-
-            .hero-inner {
-                grid-template-columns: 1fr 24px 1.1fr;
-                gap: 0;
-            }
-
-            .hero-left { text-align: left; }
-            .hero-subtitle { margin: 0 0 0 0; }
+            .hero-inner { grid-template-columns: 1fr; }
             .hero h1 { font-size: 34px; }
-            .video-label { justify-content: flex-start; }
-
-            .hero-arrow {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: rgba(255,255,255,0.35);
-                animation: bounceRight 2s ease-in-out infinite;
-            }
-
-            @keyframes bounceRight {
-                0%, 100% { transform: translateX(0); }
-                50% { transform: translateX(8px); }
-            }
-
-            .hero-arrow svg { width: 32px; height: 32px; }
-
             .steps-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
             .section-title { font-size: 28px; }
         }
@@ -479,36 +455,21 @@
                     <span>Call Confirmed</span>
                 </div>
                 <h1>You're All Set!<br>Your <em>Strategy Call</em> Is Booked.</h1>
-                <p class="hero-subtitle">Watch this quick video before your call so you know exactly what to expect and how to get the most out of it.</p>
+                <p class="hero-subtitle">Review what's below before your call so you know exactly what to expect and how to get the most out of it.</p>
             </div>
 
-            <div class="hero-arrow">
-                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
-            </div>
-
-            <div class="hero-right">
-                <div class="video-label">
-                    <div class="pulse-dot"></div>
-                    <span>Watch Before Your Call</span>
-                </div>
-                <div class="video-container">
-                    <!-- Replace this placeholder with a YouTube/Vimeo embed:
-                         <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-                           style="position:absolute;inset:0;width:100%;height:100%;border:none;"
-                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                           allowfullscreen></iframe> -->
-                    <div class="video-placeholder">
-                        <div class="play-btn">
-                            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                        </div>
-                        <p>Video coming soon &mdash; James will walk you through what to expect.</p>
-                    </div>
-                </div>
-            </div>
+            <!-- video goes here once recorded -->
         </div>
     </section>
 
-    <!-- ===== WHAT TO EXPECT ===== -->
+        <!-- VIDEO PLACEHOLDER — swap in YouTube/Vimeo embed when ready:
+             <div class="video-label">...</div>
+             <div class="video-container">
+               <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" ...></iframe>
+             </div>
+        -->
+
+        <!-- ===== WHAT TO EXPECT ===== -->
     <div class="content">
         <section class="steps-section">
             <div class="section-label"><span>What to Expect</span></div>
