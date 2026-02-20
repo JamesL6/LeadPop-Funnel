@@ -15,7 +15,7 @@ const EVENT_MAP = {
   quiz_answer:     { eventName: 'CustomizeProduct', actionSource: 'website' },
   quiz_completed:  { eventName: 'Lead',         actionSource: 'website' },
   calendar_view:   { eventName: 'Contact',      actionSource: 'website' },
-  booking_created: { eventName: 'Purchase',     actionSource: 'website' },
+  booking_created: { eventName: 'Schedule',      actionSource: 'website' },
   quiz_rejected:   { eventName: 'ViewContent',  actionSource: 'website' },
 };
 
