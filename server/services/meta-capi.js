@@ -28,10 +28,11 @@ async function sendEvent(payload) {
     return null;
   }
 
-  const mapping = EVENT_MAP[payload.event_name] || {
-    eventName: payload.event_name,
-    actionSource: 'website',
-  };
+  const mapping = EVENT_MAP[payload.event_name];
+  if (!mapping) {
+    console.log(`[Meta CAPI] Skipped "${payload.event_name}" — no mapping, not a tracked event`);
+    return null;
+  }
 
   const userData = {};
 
