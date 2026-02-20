@@ -5,7 +5,7 @@ const EVENT_MAP = {
   quiz_started:    'begin_checkout',
   quiz_answer:     'quiz_answer',
   quiz_completed:  'generate_lead',
-  calendar_view:   'schedule_view',
+  calendar_view:   'calendar_view',
   booking_created: 'purchase',
   quiz_rejected:   'quiz_disqualified',
 };
