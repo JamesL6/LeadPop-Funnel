@@ -29,7 +29,6 @@
     </script>
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=2123621785138978&ev=PageView&noscript=1"/></noscript>
-    <!-- End Meta Pixel Code -->
 
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -37,44 +36,23 @@
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-NJ6DWBPB');</script>
-    <!-- End Google Tag Manager -->
 
     <link rel="preload" as="font" href="/fonts/poppins-400.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/poppins-600.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="/fonts/poppins-700.woff2" type="font/woff2" crossorigin>
 
     <style>
-        @font-face {
-            font-family: 'Poppins';
-            font-style: normal;
-            font-weight: 400;
-            font-display: swap;
-            src: url('/fonts/poppins-400.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Poppins';
-            font-style: normal;
-            font-weight: 600;
-            font-display: swap;
-            src: url('/fonts/poppins-600.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Poppins';
-            font-style: normal;
-            font-weight: 700;
-            font-display: swap;
-            src: url('/fonts/poppins-700.woff2') format('woff2');
-        }
+        @font-face { font-family: 'Poppins'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/poppins-400.woff2') format('woff2'); }
+        @font-face { font-family: 'Poppins'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/poppins-600.woff2') format('woff2'); }
+        @font-face { font-family: 'Poppins'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/poppins-700.woff2') format('woff2'); }
 
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --primary-light: #dbeafe;
+            --primary-glow: rgba(37, 99, 235, 0.15);
             --accent: #0d1b2a;
             --accent-light: #1b2838;
             --text-primary: #1a1a2e;
@@ -85,10 +63,14 @@
             --border: #e2e8f0;
             --green: #10b981;
             --green-light: #d1fae5;
+            --green-dark: #065f46;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
             --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+            --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 16px;
+            --radius-xl: 20px;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -98,125 +80,143 @@
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        .page-wrapper {
-            max-width: 800px;
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(135deg, var(--accent) 0%, #162a42 50%, var(--primary-dark) 100%);
+            padding: 48px 24px 56px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-inner {
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 40px 20px 60px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
-        /* ===== CONFIRMATION HEADER ===== */
-        .confirm-header {
+        .hero-left {
             text-align: center;
-            padding: 48px 24px;
-            background: var(--bg-white);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
-            margin-bottom: 32px;
         }
 
-        .confirm-icon {
-            width: 72px;
-            height: 72px;
-            background: var(--green-light);
+        .confirm-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 100px;
+            padding: 8px 20px;
+            margin-bottom: 20px;
+        }
+
+        .confirm-badge .badge-check {
+            width: 22px;
+            height: 22px;
+            background: var(--green);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
+            flex-shrink: 0;
         }
 
-        .confirm-icon svg {
-            width: 36px;
-            height: 36px;
-            color: var(--green);
+        .confirm-badge .badge-check svg {
+            width: 13px;
+            height: 13px;
+            color: #fff;
         }
 
-        .confirm-header h1 {
-            font-size: 28px;
+        .confirm-badge span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6ee7b7;
+        }
+
+        .hero h1 {
+            font-size: 30px;
             font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 8px;
+            color: #fff;
+            margin-bottom: 10px;
+            line-height: 1.2;
         }
 
-        .confirm-header p {
+        .hero h1 em {
+            font-style: normal;
+            color: #60a5fa;
+        }
+
+        .hero-subtitle {
             font-size: 16px;
-            color: var(--text-secondary);
-            max-width: 480px;
-            margin: 0 auto;
+            color: rgba(255,255,255,0.7);
+            max-width: 440px;
+            margin: 0 auto 24px;
         }
 
-        /* ===== WHAT TO EXPECT ===== */
-        .expect-section {
-            margin-bottom: 32px;
+        .hero-arrow {
+            display: none;
         }
 
-        .expect-section h2 {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-align: center;
-            margin-bottom: 20px;
+        .hero-right {
+            position: relative;
         }
 
-        .expect-cards {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
+        .video-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            justify-content: center;
         }
 
-        .expect-card {
-            background: var(--bg-white);
-            border-radius: var(--radius-md);
-            padding: 24px;
-            box-shadow: var(--shadow-sm);
-            border-left: 4px solid var(--primary);
+        .video-label .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
         }
 
-        .expect-card .card-step {
-            font-size: 12px;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.3); }
+        }
+
+        .video-label span {
+            font-size: 13px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: var(--primary);
-            margin-bottom: 6px;
-        }
-
-        .expect-card h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 6px;
-        }
-
-        .expect-card p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        /* ===== VIDEO SECTION ===== */
-        .video-section {
-            margin-bottom: 32px;
-        }
-
-        .video-section h2 {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-align: center;
-            margin-bottom: 16px;
+            color: rgba(255,255,255,0.8);
         }
 
         .video-container {
             position: relative;
             width: 100%;
             padding-bottom: 56.25%;
-            background: var(--accent);
-            border-radius: var(--radius-md);
+            background: rgba(0,0,0,0.3);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: var(--shadow-md);
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
         .video-placeholder {
@@ -226,42 +226,138 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.5);
             text-align: center;
             padding: 24px;
         }
 
-        .video-placeholder svg {
+        .play-btn {
             width: 64px;
             height: 64px;
-            margin-bottom: 12px;
-            opacity: 0.5;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 20px rgba(37,99,235,0.4);
         }
 
+        .play-btn svg { width: 28px; height: 28px; color: #fff; margin-left: 3px; }
+
         .video-placeholder p {
+            font-size: 13px;
+            max-width: 240px;
+        }
+
+        /* ===== CONTENT WRAPPER ===== */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== WHAT TO EXPECT ===== */
+        .steps-section {
+            padding: 56px 0 48px;
+        }
+
+        .section-label {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .section-label span {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 5px 14px;
+            border-radius: 100px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 36px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            position: relative;
+        }
+
+        .step-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            border: 1px solid var(--border);
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+
+        .step-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        .step-card h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .step-card p {
             font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
 
         /* ===== FAQ SECTION ===== */
         .faq-section {
-            margin-bottom: 40px;
+            padding: 0 0 56px;
         }
 
-        .faq-section h2 {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-align: center;
-            margin-bottom: 20px;
+        .faq-list {
+            max-width: 700px;
+            margin: 0 auto;
         }
 
         .faq-item {
             background: var(--bg-white);
             border-radius: var(--radius-md);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
             overflow: hidden;
+            transition: border-color var(--transition);
         }
+
+        .faq-item:hover { border-color: var(--primary-light); }
+        .faq-item.open { border-color: var(--primary); }
 
         .faq-question {
             width: 100%;
@@ -277,195 +373,232 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 16px;
             transition: background var(--transition);
         }
 
-        .faq-question:hover {
-            background: var(--bg-light);
-        }
+        .faq-question:hover { background: var(--bg-light); }
 
-        .faq-question .faq-icon {
+        .faq-chevron {
             flex-shrink: 0;
-            width: 24px;
-            height: 24px;
-            transition: transform var(--transition);
+            width: 28px;
+            height: 28px;
+            background: var(--bg-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
         }
 
-        .faq-item.open .faq-question .faq-icon {
-            transform: rotate(45deg);
+        .faq-chevron svg { width: 16px; height: 16px; color: var(--text-muted); transition: transform var(--transition); }
+
+        .faq-item.open .faq-chevron {
+            background: var(--primary);
+        }
+
+        .faq-item.open .faq-chevron svg {
+            color: #fff;
+            transform: rotate(180deg);
         }
 
         .faq-answer {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease;
+            transition: max-height 0.35s ease;
         }
 
         .faq-answer-inner {
-            padding: 0 24px 18px;
+            padding: 0 24px 20px;
             font-size: 14px;
             color: var(--text-secondary);
-            line-height: 1.7;
+            line-height: 1.75;
         }
 
         /* ===== FOOTER ===== */
         .page-footer {
             text-align: center;
-            padding: 24px 0;
+            padding: 24px 20px 32px;
             border-top: 1px solid var(--border);
         }
 
-        .page-footer p {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .page-footer a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .page-footer a:hover {
-            text-decoration: underline;
-        }
+        .page-footer p { font-size: 13px; color: var(--text-muted); }
+        .page-footer a { color: var(--primary); text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
 
         /* ===== RESPONSIVE ===== */
-        @media (min-width: 640px) {
-            .page-wrapper { padding: 60px 24px 80px; }
-            .confirm-header { padding: 56px 32px; }
-            .confirm-header h1 { font-size: 32px; }
-            .expect-cards { grid-template-columns: repeat(3, 1fr); }
+        @media (min-width: 768px) {
+            .hero { padding: 64px 40px 72px; }
+
+            .hero-inner {
+                grid-template-columns: 1fr 24px 1.1fr;
+                gap: 0;
+            }
+
+            .hero-left { text-align: left; }
+            .hero-subtitle { margin: 0 0 0 0; }
+            .hero h1 { font-size: 34px; }
+            .video-label { justify-content: flex-start; }
+
+            .hero-arrow {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: rgba(255,255,255,0.35);
+                animation: bounceRight 2s ease-in-out infinite;
+            }
+
+            @keyframes bounceRight {
+                0%, 100% { transform: translateX(0); }
+                50% { transform: translateX(8px); }
+            }
+
+            .hero-arrow svg { width: 32px; height: 32px; }
+
+            .steps-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+            .section-title { font-size: 28px; }
+        }
+
+        @media (min-width: 1024px) {
+            .hero h1 { font-size: 38px; }
         }
     </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJ6DWBPB"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-    <div class="page-wrapper">
-
-        <!-- Confirmation Header -->
-        <div class="confirm-header">
-            <div class="confirm-icon">
-                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    <!-- ===== HERO: Confirmation + Video ===== -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-left">
+                <div class="confirm-badge">
+                    <div class="badge-check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <span>Call Confirmed</span>
+                </div>
+                <h1>You're All Set!<br>Your <em>Strategy Call</em> Is Booked.</h1>
+                <p class="hero-subtitle">Watch this quick video before your call so you know exactly what to expect and how to get the most out of it.</p>
             </div>
-            <h1>You're All Set!</h1>
-            <p>Your strategy call has been booked. Here's what to expect before, during, and after your call.</p>
-        </div>
 
-        <!-- What to Expect -->
-        <div class="expect-section">
-            <h2>What to Expect</h2>
-            <div class="expect-cards">
-                <div class="expect-card">
-                    <div class="card-step">Before Your Call</div>
-                    <h3>We'll Prepare Your Analysis</h3>
-                    <p>Our team will review your lending criteria and build a custom lead projection based on your market and loan products.</p>
-                </div>
-                <div class="expect-card">
-                    <div class="card-step">During Your Call</div>
-                    <h3>1-on-1 Strategy Walkthrough</h3>
-                    <p>We'll walk you through your custom pricing, volume projections, and exactly how our exclusive leads work for your specific lending criteria.</p>
-                </div>
-                <div class="expect-card">
-                    <div class="card-step">After Your Call</div>
-                    <h3>Leads Start Flowing</h3>
-                    <p>If we're a fit, leads can start flowing within days. No contracts, no retainers, cancel anytime. You only pay for qualified leads.</p>
-                </div>
+            <div class="hero-arrow">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
             </div>
-        </div>
 
-        <!-- Video Section -->
-        <div class="video-section">
-            <h2>A Quick Message From James</h2>
-            <div class="video-container">
-                <!-- Replace this placeholder with a YouTube/Vimeo embed:
-                     <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-                       style="position:absolute;inset:0;width:100%;height:100%;border:none;"
-                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                       allowfullscreen></iframe> -->
-                <div class="video-placeholder">
-                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-                    <p>Video coming soon &mdash; James will walk you through what to expect on your call.</p>
+            <div class="hero-right">
+                <div class="video-label">
+                    <div class="pulse-dot"></div>
+                    <span>Watch Before Your Call</span>
+                </div>
+                <div class="video-container">
+                    <!-- Replace this placeholder with a YouTube/Vimeo embed:
+                         <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                           style="position:absolute;inset:0;width:100%;height:100%;border:none;"
+                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                           allowfullscreen></iframe> -->
+                    <div class="video-placeholder">
+                        <div class="play-btn">
+                            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                        <p>Video coming soon &mdash; James will walk you through what to expect.</p>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- FAQ Section -->
-        <div class="faq-section">
-            <h2>Common Questions Before Your Call</h2>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <span>What happens on the call?</span>
-                    <svg class="faq-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                </button>
-                <div class="faq-answer"><div class="faq-answer-inner">It's a casual, no-pressure 1-on-1 strategy call. We'll review your lending criteria, show you a custom lead volume projection for your market, and walk through exactly how pricing works. You'll leave the call with a clear picture of what working together looks like — whether you decide to move forward or not.</div></div>
+    <!-- ===== WHAT TO EXPECT ===== -->
+    <div class="content">
+        <section class="steps-section">
+            <div class="section-label"><span>What to Expect</span></div>
+            <h2 class="section-title">Your Call in 3 Simple Steps</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Before Your Call</h3>
+                    <p>Our team reviews your lending criteria and builds a custom lead projection based on your market, loan products, and volume capacity.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>During Your Call</h3>
+                    <p>A 1-on-1 walkthrough of your custom pricing, volume projections, and exactly how our exclusive leads work for your specific lending criteria.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>After Your Call</h3>
+                    <p>If we're a fit, leads can start flowing within days. No contracts, no retainers, cancel anytime. You only pay for qualified leads that match your criteria.</p>
+                </div>
             </div>
+        </section>
 
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <span>Is there any obligation or commitment?</span>
-                    <svg class="faq-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                </button>
-                <div class="faq-answer"><div class="faq-answer-inner">None at all. There are no contracts, no retainers, and no setup fees. If we're a fit and you decide to move forward, you only pay per qualified lead. If not, no hard feelings. We'd rather be honest than take on a client we can't deliver for.</div></div>
+        <!-- ===== FAQ ===== -->
+        <section class="faq-section">
+            <div class="section-label"><span>Common Questions</span></div>
+            <h2 class="section-title">Everything You Need to Know</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>What happens on the call?</span>
+                        <div class="faq-chevron"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">It's a casual, no-pressure 1-on-1 strategy call. We'll review your lending criteria, show you a custom lead volume projection for your market, and walk through exactly how pricing works. You'll leave the call with a clear picture of what working together looks like &mdash; whether you decide to move forward or not.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Is there any obligation or commitment?</span>
+                        <div class="faq-chevron"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">None at all. There are no contracts, no retainers, and no setup fees. If we're a fit and you decide to move forward, you only pay per qualified lead. If not, no hard feelings. We'd rather be honest than take on a client we can't deliver for.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>How much do leads cost?</span>
+                        <div class="faq-chevron"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Pricing depends on your specific criteria &mdash; the types of loans you fund, credit thresholds, revenue minimums, and monthly volume. Tighter criteria means higher quality at a higher cost per lead. Broader criteria means lower cost and higher volume. We'll give you exact pricing on the call once we understand your buy box.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Are leads really 100% exclusive?</span>
+                        <div class="faq-chevron"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Yes, 100%. Every lead we deliver is yours alone. We never sell the same lead to multiple lenders or brokers. Your leads are exclusive to you &mdash; that's the entire model.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>What if a lead doesn't meet my criteria?</span>
+                        <div class="faq-chevron"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">We replace it free. If a lead is clearly unqualified or doesn't match your agreed-upon criteria &mdash; wrong contact info, doesn't meet your credit score minimum, revenue threshold, or other filters &mdash; just flag it and we'll send a replacement at no charge. No disputes, no hassle.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>How quickly will I start receiving leads?</span>
+                        <div class="faq-chevron"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Once we agree on your criteria and campaigns go live, leads are delivered in real-time directly to your CRM. Most clients see their first leads within a few days of launch. No waiting, no batching.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>What CRMs do you integrate with?</span>
+                        <div class="faq-chevron"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">All major platforms: Salesforce, HubSpot, Velocify, Zoho, and even Google Sheets. If you use it, we can push leads there in real-time.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>How does SMS OTP verification work?</span>
+                        <div class="faq-chevron"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">When a prospect fills out our form, we send a one-time passcode via SMS to their phone number. They must enter this code to complete the submission. This confirms the phone number is real, active, and belongs to the person filling out the form &mdash; eliminating fake numbers and bot submissions.</div></div>
+                </div>
             </div>
+        </section>
+    </div>
 
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <span>How much do leads cost?</span>
-                    <svg class="faq-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                </button>
-                <div class="faq-answer"><div class="faq-answer-inner">Pricing depends on your specific criteria — the types of loans you fund, credit thresholds, revenue minimums, and monthly volume. Tighter criteria means higher quality at a higher cost per lead. Broader criteria means lower cost and higher volume. We'll give you exact pricing on the call once we understand your buy box.</div></div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <span>Are leads really 100% exclusive?</span>
-                    <svg class="faq-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                </button>
-                <div class="faq-answer"><div class="faq-answer-inner">Yes, 100%. Every lead we deliver is yours alone. We never sell the same lead to multiple lenders or brokers. Your leads are exclusive to you — that's the entire model.</div></div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <span>What if a lead doesn't meet my criteria?</span>
-                    <svg class="faq-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                </button>
-                <div class="faq-answer"><div class="faq-answer-inner">We replace it free. If a lead is clearly unqualified or doesn't match your agreed-upon criteria — wrong contact info, doesn't meet your credit score minimum, revenue threshold, or other filters — just flag it and we'll send a replacement at no charge. No disputes, no hassle.</div></div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <span>How quickly will I start receiving leads?</span>
-                    <svg class="faq-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                </button>
-                <div class="faq-answer"><div class="faq-answer-inner">Once we agree on your criteria and campaigns go live, leads are delivered in real-time directly to your CRM. Most clients see their first leads within a few days of launch. No waiting, no batching.</div></div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <span>What CRMs do you integrate with?</span>
-                    <svg class="faq-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                </button>
-                <div class="faq-answer"><div class="faq-answer-inner">All major platforms: Salesforce, HubSpot, Velocify, Zoho, and even Google Sheets. If you use it, we can push leads there in real-time.</div></div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <span>How does SMS OTP verification work?</span>
-                    <svg class="faq-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                </button>
-                <div class="faq-answer"><div class="faq-answer-inner">When a prospect fills out our form, we send a one-time passcode via SMS to their phone number. They must enter this code to complete the submission. This confirms the phone number is real, active, and belongs to the person filling out the form — eliminating fake numbers and bot submissions.</div></div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="page-footer">
-            <p>&copy; 2026 LeadPop. All rights reserved. &middot; <a href="https://www.leadpop.io">leadpop.io</a></p>
-        </div>
-
+    <div class="page-footer">
+        <p>&copy; 2026 LeadPop. All rights reserved. &middot; <a href="https://www.leadpop.io">leadpop.io</a></p>
     </div>
 
     <!-- ==================== TRACKING + FAQ JAVASCRIPT ==================== -->
@@ -478,9 +611,7 @@
                 return match ? decodeURIComponent(match[2]) : null;
             }
 
-            function getFbp() {
-                return getCookie('_fbp') || null;
-            }
+            function getFbp() { return getCookie('_fbp') || null; }
 
             function getFbc() {
                 var cookie = getCookie('_fbc');
@@ -501,33 +632,27 @@
             }
 
             var saved = null;
-            try {
-                saved = JSON.parse(localStorage.getItem('lp_funnel'));
-            } catch (e) {}
+            try { saved = JSON.parse(localStorage.getItem('lp_funnel')); } catch (e) {}
 
             var sessionId = (saved && saved.session_id) || 'unknown';
             var answers = (saved && saved.answers) || { loanTypes: [], monthlyVolume: '', currentSource: '' };
             var eventId = crypto.randomUUID();
 
-            // 1. Send to Railway (server-side CAPI)
-            var payload = {
-                event_name: 'booking_created',
-                step: 10,
-                event_id: eventId,
-                session_id: sessionId,
-                source_url: window.location.href,
-                fbp: getFbp(),
-                fbc: getFbc(),
-                ga_client_id: getGaClientId(),
-                answers: answers
-            };
-
             navigator.sendBeacon(TRACKING_API, new Blob(
-                [JSON.stringify(payload)],
+                [JSON.stringify({
+                    event_name: 'booking_created',
+                    step: 10,
+                    event_id: eventId,
+                    session_id: sessionId,
+                    source_url: window.location.href,
+                    fbp: getFbp(),
+                    fbc: getFbc(),
+                    ga_client_id: getGaClientId(),
+                    answers: answers
+                })],
                 { type: 'application/json' }
             ));
 
-            // 2. Fire browser pixel (deduplicates with CAPI via event_id)
             if (typeof fbq !== 'undefined') {
                 var customData = { funnel_step: 10 };
                 if (answers.loanTypes && answers.loanTypes.length) customData.loan_types = answers.loanTypes.join(', ');
@@ -536,31 +661,20 @@
                 fbq('track', 'Schedule', customData, { eventID: eventId });
             }
 
-            // 3. Push to GTM dataLayer
             window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-                event: 'schedule_booked',
-                quiz_answers: answers,
-                event_id: eventId
-            });
+            window.dataLayer.push({ event: 'schedule_booked', quiz_answers: answers, event_id: eventId });
 
-            // 4. Clear localStorage — funnel complete
-            try {
-                localStorage.removeItem('lp_funnel');
-            } catch (e) {}
+            try { localStorage.removeItem('lp_funnel'); } catch (e) {}
         })();
 
-        // FAQ accordion
         function toggleFaq(btn) {
             var item = btn.parentElement;
             var answer = item.querySelector('.faq-answer');
             var isOpen = item.classList.contains('open');
-
             document.querySelectorAll('.faq-item.open').forEach(function(el) {
                 el.classList.remove('open');
                 el.querySelector('.faq-answer').style.maxHeight = null;
             });
-
             if (!isOpen) {
                 item.classList.add('open');
                 answer.style.maxHeight = answer.scrollHeight + 'px';
