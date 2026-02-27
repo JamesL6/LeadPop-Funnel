@@ -55,17 +55,24 @@ router.post('/booking-webhook', async (req, res) => {
       const tags = ghl.generateTagsFromAnswers(answers);
 
       if (contact_id) {
-        const customFields = [];
-        const fieldMappings = {
-          loan_types: answers.loanTypes?.join(', ') || '',
-          monthly_volume: answers.monthlyVolume || '',
-          current_source: answers.currentSource || '',
-          funnel_answers: JSON.stringify(answers),
+        // GHL PUT /contacts/:id requires field IDs, not key names
+        const FIELD_IDS = {
+          loan_types:         'CQAGt3yGdxk2Z3U4HpKh',
+          monthly_volume:     'UrM0Yv8am71DNOKiHQH5',
+          current_source:     'QfIWgdaML1irtCwNjTwQ',
+          funnel_answers:     'dNgy4WmM2d6dsQt5Wfc9',
+          funnel_step_reached:'XauyPCJxxgrsOFxPlSzr',
+        };
+        const fieldValueMap = {
+          loan_types:          answers.loanTypes?.join(', ') || '',
+          monthly_volume:      answers.monthlyVolume || '',
+          current_source:      answers.currentSource || '',
+          funnel_answers:      JSON.stringify(answers),
           funnel_step_reached: String(step || 9),
         };
-        for (const [key, value] of Object.entries(fieldMappings)) {
-          if (value) customFields.push({ key: `contact.${key}`, field_value: value });
-        }
+        const customFields = Object.entries(fieldValueMap)
+          .filter(([, value]) => value)
+          .map(([key, value]) => ({ id: FIELD_IDS[key], field_value: value }));
 
         const [noteResult, tagResult, fieldResult] = await Promise.allSettled([
           ghl.addContactNote(contact_id, noteBody),
