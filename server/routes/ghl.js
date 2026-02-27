@@ -55,13 +55,27 @@ router.post('/booking-webhook', async (req, res) => {
       const tags = ghl.generateTagsFromAnswers(answers);
 
       if (contact_id) {
-        const [noteResult, tagResult] = await Promise.allSettled([
+        const customFields = [];
+        const fieldMappings = {
+          loan_types: answers.loanTypes?.join(', ') || '',
+          monthly_volume: answers.monthlyVolume || '',
+          current_source: answers.currentSource || '',
+          funnel_answers: JSON.stringify(answers),
+          funnel_step_reached: String(step || 9),
+        };
+        for (const [key, value] of Object.entries(fieldMappings)) {
+          if (value) customFields.push({ key: `contact.${key}`, field_value: value });
+        }
+
+        const [noteResult, tagResult, fieldResult] = await Promise.allSettled([
           ghl.addContactNote(contact_id, noteBody),
           ghl.addContactTags(contact_id, tags),
+          customFields.length ? ghl.updateContactById(contact_id, { customFields }) : Promise.resolve(null),
         ]);
 
         results.note = noteResult.status === 'fulfilled' ? noteResult.value : { error: noteResult.reason?.message };
         results.tags = tagResult.status === 'fulfilled' ? tagResult.value : { error: tagResult.reason?.message };
+        results.fields = fieldResult.status === 'fulfilled' ? fieldResult.value : { error: fieldResult.reason?.message };
       }
 
       if (email) {

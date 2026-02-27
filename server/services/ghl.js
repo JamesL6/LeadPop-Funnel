@@ -73,6 +73,28 @@ async function getCustomFields() {
   return data.customFields || [];
 }
 
+async function updateContactById(contactId, contactData) {
+  try {
+    const res = await fetch(`${GHL_API_BASE}/contacts/${contactId}`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify(contactData),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      console.log(`[GHL] Contact ${contactId} updated with custom fields`);
+      return data;
+    }
+
+    console.error('[GHL] Contact update error:', data);
+    return { error: data };
+  } catch (err) {
+    console.error('[GHL] Network error updating contact:', err.message);
+    return { error: err.message };
+  }
+}
+
 async function createOrUpdateContact(contactData) {
   const locationId = process.env.GHL_LOCATION_ID;
   if (!locationId) {
@@ -193,6 +215,7 @@ function generateTagsFromAnswers(answers) {
 module.exports = {
   setupCustomFields,
   getCustomFields,
+  updateContactById,
   createOrUpdateContact,
   addContactNote,
   addContactTags,
